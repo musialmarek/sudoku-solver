@@ -1,15 +1,6 @@
 # Sudoku-Solver  app
 > Application created for my training of algorithms 
 
-## Table of contents
-* [General info](#general-info)
-* [Technologies](#technologies)
-* [Demo version](#demo-version)
-* [Features](#features)
-* [Status](#status)
-* [Inspiration](#inspiration)
-* [Contact](#contact)
-
 ## General info
 With this app you can solve sudoku 9x9 by algorithms, giving numbers that you now, and app gives you whole solution (filled array)
 
