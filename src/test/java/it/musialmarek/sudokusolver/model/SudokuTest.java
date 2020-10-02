@@ -71,15 +71,36 @@ public class SudokuTest {
         sudokuOne.fillRows();
         sudokuTwo.fillRows();
         //then
-        Integer[] rowOne0 = {0,1, 2, 3, 4, 5, 6, 7, 8};
+        Integer[] rowOne0 = {0, 1, 2, 3, 4, 5, 6, 7, 8};
         Integer[] rowOne8 = {80, 81, 82, 84, 85, 87, 88};
-        Integer [] rowTwo0 =  {1, 1, 2, 2, 2, 3, 3, 3};
-        Integer[] rowTwo5 ={4, 4, 4, 5, 5, 5, 6, 6, 6};
+        Integer[] rowTwo0 = {1, 1, 2, 2, 2, 3, 3, 3};
+        Integer[] rowTwo5 = {4, 4, 4, 5, 5, 5, 6, 6, 6};
         Assert.assertThat(sudokuOne.getRows().length, is(9));
         Assert.assertThat(sudokuOne.getRows()[0], is(rowOne0));
         Assert.assertThat(sudokuOne.getRows()[8], is(rowOne8));
         Assert.assertThat(sudokuTwo.getRows().length, is(9));
         Assert.assertThat(sudokuTwo.getRows()[0], is(rowTwo0));
         Assert.assertThat(sudokuTwo.getRows()[5], is(rowTwo5));
+    }
+
+    @Test
+    public void shouldFillSectionsOfSudokuWithDataFromArray() {
+        //given
+        sudokuOne.setArray(arrayOne);
+        sudokuTwo.setArray(arrayTwo);
+        //when
+        sudokuOne.fillSections();
+        sudokuTwo.fillSections();
+        //
+        Integer[] sectionOne0 = {0, 1, 2, 10, 11, 12, 20, 21, 22};
+        Integer[] sectionOne4 = {33, 34, 35, 44, 45, 55};
+        Integer[] sectionTwo0 = {1, 1, 1, 1, 1, 1};
+        Integer[] sectionTwo2 = {3, 3, 3, 3, 3, 3, 3, 3, 3};
+        Assert.assertThat(sudokuOne.getSections().length, is(9));
+        Assert.assertThat(sudokuOne.getSections()[0], is(sectionOne0));
+        Assert.assertThat(sudokuOne.getSections()[4], is(sectionOne4));
+        Assert.assertThat(sudokuTwo.getSections().length, is(9));
+        Assert.assertThat(sudokuTwo.getSections()[0], is(sectionTwo0));
+        Assert.assertThat(sudokuTwo.getSections()[2], is(sectionTwo2));
     }
 }
