@@ -27,5 +27,14 @@ public class Sudoku {
             }
         }
     }
-
+    public void fillRows() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Integer element = array[i][j];
+                if (element != null) {
+                    rows[i] = ArrayUtils.add(rows[i], element);
+                }
+            }
+        }
+    }
 }
