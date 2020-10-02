@@ -63,7 +63,7 @@ public class SudokuTest {
     }
 
     @Test
-    public void shouldFiilRowsOfSudokuWuthDataFromArray() {
+    public void shouldFillRowsOfSudokuWithDataFromArray() {
         // given
         sudokuOne.setArray(arrayOne);
         sudokuTwo.setArray(arrayTwo);
