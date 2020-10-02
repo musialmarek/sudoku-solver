@@ -27,12 +27,30 @@ public class Sudoku {
             }
         }
     }
+
     public void fillRows() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Integer element = array[i][j];
                 if (element != null) {
                     rows[i] = ArrayUtils.add(rows[i], element);
+                }
+            }
+        }
+    }
+
+    public void fillSections() {
+        for (int bigRow = 0; bigRow < 3; bigRow++) {
+            for (int bigCol = 0; bigCol < 3; bigCol++) {
+                for (int smallRow = 0; smallRow < 3; smallRow++) {
+                    for (int smallCol = 0; smallCol < 3; smallCol++) {
+                        int section = bigRow * 3 + bigCol;
+                        Integer element = array[bigRow * 3 + smallRow][bigCol * 3 + smallCol];
+                        if (element != null) {
+                            sections[section] = ArrayUtils.add(sections[section], element);
+
+                        }
+                    }
                 }
             }
         }
