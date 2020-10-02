@@ -43,8 +43,8 @@ public class SudokuTest {
     @Test
     public void shouldFillColsOfSudokuWithDataFromArray() {
         //given
-        sudokuOne.setTab(arrayOne);
-        sudokuTwo.setTab(arrayTwo);
+        sudokuOne.setArray(arrayOne);
+        sudokuTwo.setArray(arrayTwo);
         //when
         sudokuOne.fillCols();
         sudokuTwo.fillCols();
@@ -60,5 +60,26 @@ public class SudokuTest {
         Assert.assertThat(sudokuTwo.getCols()[0], is(colTwo0));
         Assert.assertThat(sudokuTwo.getCols()[2], is(colTwo2));
 
+    }
+
+    @Test
+    public void shouldFiilRowsOfSudokuWuthDataFromArray() {
+        // given
+        sudokuOne.setArray(arrayOne);
+        sudokuTwo.setArray(arrayTwo);
+        //when
+        sudokuOne.fillRows();
+        sudokuTwo.fillRows();
+        //then
+        Integer[] rowOne0 = {0,1, 2, 3, 4, 5, 6, 7, 8};
+        Integer[] rowOne8 = {80, 81, 82, 84, 85, 87, 88};
+        Integer [] rowTwo0 =  {1, 1, 2, 2, 2, 3, 3, 3};
+        Integer[] rowTwo5 ={4, 4, 4, 5, 5, 5, 6, 6, 6};
+        Assert.assertThat(sudokuOne.getRows().length, is(9));
+        Assert.assertThat(sudokuOne.getRows()[0], is(rowOne0));
+        Assert.assertThat(sudokuOne.getRows()[8], is(rowOne8));
+        Assert.assertThat(sudokuTwo.getRows().length, is(9));
+        Assert.assertThat(sudokuTwo.getRows()[0], is(rowTwo0));
+        Assert.assertThat(sudokuTwo.getRows()[5], is(rowTwo5));
     }
 }
