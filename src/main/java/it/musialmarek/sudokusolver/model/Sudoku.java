@@ -13,6 +13,13 @@ public class Sudoku {
     private Integer[][] rows = new Integer[9][];
     private Integer[][] sections = new Integer[9][];
 
+    public Sudoku(Integer[][] array) {
+        this.array = array;
+        fillCols();
+        fillRows();
+        fillSections();
+    }
+
     public void setArray(Integer[][] array) {
         this.array = array;
     }
@@ -20,9 +27,9 @@ public class Sudoku {
     public void fillCols() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Integer element = array[j][i];
+                Integer element = this.array[j][i];
                 if (element != null) {
-                    cols[i] = ArrayUtils.add(cols[i], element);
+                    this.cols[i] = ArrayUtils.add(this.cols[i], element);
                 }
             }
         }
@@ -31,9 +38,9 @@ public class Sudoku {
     public void fillRows() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Integer element = array[i][j];
+                Integer element = this.array[i][j];
                 if (element != null) {
-                    rows[i] = ArrayUtils.add(rows[i], element);
+                    this.rows[i] = ArrayUtils.add(this.rows[i], element);
                 }
             }
         }
@@ -45,9 +52,9 @@ public class Sudoku {
                 for (int smallRow = 0; smallRow < 3; smallRow++) {
                     for (int smallCol = 0; smallCol < 3; smallCol++) {
                         int section = bigRow * 3 + bigCol;
-                        Integer element = array[bigRow * 3 + smallRow][bigCol * 3 + smallCol];
+                        Integer element = this.array[bigRow * 3 + smallRow][bigCol * 3 + smallCol];
                         if (element != null) {
-                            sections[section] = ArrayUtils.add(sections[section], element);
+                            this.sections[section] = ArrayUtils.add(this.sections[section], element);
                         }
                     }
                 }
