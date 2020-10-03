@@ -48,7 +48,6 @@ public class Sudoku {
                         Integer element = array[bigRow * 3 + smallRow][bigCol * 3 + smallCol];
                         if (element != null) {
                             sections[section] = ArrayUtils.add(sections[section], element);
-
                         }
                     }
                 }
