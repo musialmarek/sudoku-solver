@@ -11,26 +11,47 @@ import java.util.Set;
 
 @Service
 public class Solver {
-    public Sudoku solveSudoku(Sudoku sudoku) {
-        return new Sudoku(new Integer[][]
-                {
-                        {7, 2, 5, 1, 6, 9, 3, 8, 4},
-                        {6, 4, 9, 2, 3, 8, 1, 5, 7},
-                        {8, 1, 3, 4, 5, 7, 2, 6, 9},
-                        {1, 6, 2, 9, 4, 3, 5, 7, 8},
-                        {9, 3, 4, 7, 8, 5, 6, 1, 2},
-                        {5, 7, 8, 6, 1, 2, 9, 4, 3},
-                        {2, 5, 1, 8, 9, 4, 7, 3, 6},
-                        {3, 8, 7, 5, 2, 6, 4, 9, 1},
-                        {4, 9, 6, 3, 7, 1, 8, 2, 5}
-                });
+    public static Sudoku solveSudoku(Sudoku sudoku) {
+
+        Integer numberOfNullsStart = 1;
+        Integer numberOfNullEnd = 0;
+        while (numberOfNullEnd < numberOfNullsStart) {
+            numberOfNullsStart = getNumberOfNulls(sudoku);
+            fillEmptyBySingle(sudoku);
+            numberOfNullEnd = getNumberOfNulls(sudoku);
+        }
+        return sudoku;
     }
 
-    private static Set<Integer>[][] getPossibilities(Sudoku sudoku) {
+    private static void fillEmptyBySingle(Sudoku sudoku) {
+        Integer[][][] possibilities = getPossibilities(sudoku);
+        for (int i = 0; i < sudoku.getArray().length; i++) {
+            for (int j = 0; j < sudoku.getArray()[i].length; j++) {
+                if (possibilities[i][j] != null && possibilities[i][j].length == 1) {
+                    sudoku.getArray()[i][j] = possibilities[i][j][0];
+                }
+            }
+
+        }
+    }
+
+    private static Integer getNumberOfNulls(Sudoku sudoku) {
+        Integer numberOfNulls = 0;
+        for (Integer[] integers : sudoku.getArray()) {
+            for (Integer integer : integers) {
+                if (integer == null) {
+                    numberOfNulls++;
+                }
+            }
+        }
+        return numberOfNulls;
+    }
+
+    private static Integer[][][] getPossibilities(Sudoku sudoku) {
         Integer[] set = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Integer[][][] possibilities = new Integer[9][9][];
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < sudoku.getArray().length; i++) {
+            for (int j = 0; j < sudoku.getArray()[i].length; j++) {
                 if (sudoku.getArray()[i][j] == null) {
                     Set<Integer> notAvailableSet = new HashSet<>();
                     notAvailableSet.addAll(List.of(sudoku.getRows()[i]));
@@ -38,12 +59,10 @@ public class Solver {
                     notAvailableSet.addAll(List.of(sudoku.getSections()[calculateSectionIndex(i, j)]));
                     Integer[] notAvailableNumbers = notAvailableSet.toArray(new Integer[0]);
                     possibilities[i][j] = ArrayUtils.removeElements(set, notAvailableNumbers);
-                    System.out.println(i + "," + j + " - " + Arrays.toString(possibilities[i][j]));
-
                 }
             }
         }
-        return null;
+        return possibilities;
     }
 
     private static int calculateSectionIndex(int x, int y) {
