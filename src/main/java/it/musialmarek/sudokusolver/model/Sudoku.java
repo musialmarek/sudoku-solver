@@ -1,11 +1,9 @@
 package it.musialmarek.sudokusolver.model;
 
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 
-@Getter
 @NoArgsConstructor
 public class Sudoku {
     private Integer[][] array = new Integer[9][9];
@@ -18,6 +16,25 @@ public class Sudoku {
         fillCols();
         fillRows();
         fillSections();
+    }
+
+    public Integer[][] getArray() {
+        return array;
+    }
+
+    public Integer[][] getCols() {
+        fillCols();
+        return cols;
+    }
+
+    public Integer[][] getRows() {
+        fillRows();
+        return rows;
+    }
+
+    public Integer[][] getSections() {
+        fillSections();
+        return sections;
     }
 
     public void setArray(Integer[][] array) {
