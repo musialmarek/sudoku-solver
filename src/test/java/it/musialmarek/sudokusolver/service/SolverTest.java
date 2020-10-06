@@ -30,7 +30,7 @@ public class SolverTest {
                 {4, null, null, 3, 7, null, null, 2, 5}
         });
         //when
-        Sudoku solvedSudoku = solver.solveSudoku(sudoku);
+        Sudoku solvedSudoku = Solver.solveSudoku(sudoku);
         //then
         Assert.assertThat(solvedSudoku.getArray(), is(new Integer[][]{
                 {7, 2, 5, 1, 6, 9, 3, 8, 4},
