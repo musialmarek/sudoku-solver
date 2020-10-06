@@ -39,10 +39,10 @@ public class Solver {
             }
             for (int j = 0; j < sudoku.getArray().length; j++) {
                 for (Integer only : onlys) {
-                    int x = j / 3 + 3 * (i / 3);
-                    int y = j % 3 + 3 * (i % 3);
-                    if (sudoku.getArray()[x][y] == null && ArrayUtils.contains(possibilities[x][y], only)) {
-                        sudoku.getArray()[x][y] = only;
+                    int row = j / 3 + 3 * (i / 3);
+                    int col = j % 3 + 3 * (i % 3);
+                    if (sudoku.getArray()[row][col] == null && ArrayUtils.contains(possibilities[row][col], only)) {
+                        sudoku.getArray()[row][col] = only;
                     }
                 }
             }
@@ -110,24 +110,25 @@ public class Solver {
     private static Integer[][][] getPossibilities(Sudoku sudoku) {
         Integer[] set = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         Integer[][][] possibilities = new Integer[9][9][];
-        for (int i = 0; i < sudoku.getArray().length; i++) {
-            for (int j = 0; j < sudoku.getArray()[i].length; j++) {
-                if (sudoku.getArray()[i][j] == null) {
+        for (int row = 0; row < sudoku.getArray().length; row++) {
+            for (int col = 0; col < sudoku.getArray()[row].length; col++) {
+                if (sudoku.getArray()[row][col] == null) {
                     Set<Integer> notAvailableSet = new HashSet<>();
-                    notAvailableSet.addAll(List.of(sudoku.getRows()[i]));
-                    notAvailableSet.addAll(List.of(sudoku.getCols()[j]));
-                    notAvailableSet.addAll(List.of(sudoku.getSections()[calculateSectionIndex(i, j)]));
+                    notAvailableSet.addAll(List.of(sudoku.getRows()[row]));
+                    notAvailableSet.addAll(List.of(sudoku.getCols()[col]));
+                    notAvailableSet.addAll(List.of(sudoku.getSections()[calculateSectionIndex(row, col)]));
                     Integer[] notAvailableNumbers = notAvailableSet.toArray(new Integer[0]);
-                    possibilities[i][j] = ArrayUtils.removeElements(set, notAvailableNumbers);
+                    possibilities[row][col] = ArrayUtils.removeElements(set, notAvailableNumbers);
                 } else {
-                    possibilities[i][j] = ArrayUtils.add(new Integer[0], sudoku.getArray()[i][j]);
+                    possibilities[row][col] = ArrayUtils.add(new Integer[0], sudoku.getArray()[row][col]);
                 }
             }
         }
         return possibilities;
     }
 
-    private static int calculateSectionIndex(int x, int y) {
-        return (x - x % 3) + (y - y % 3) / 3;
+    private static int calculateSectionIndex(int row, int col) {
+        return (row - row % 3) + (col - col % 3) / 3;
     }
+
 }
