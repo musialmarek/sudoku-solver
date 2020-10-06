@@ -16,7 +16,7 @@ public class SolverTest {
     }
 
     @Test
-    public void shouldReturnPossibilitiesArray() {
+    public void shouldReturnSolvedSudoku() {
         //given
         Sudoku sudoku = new Sudoku(new Integer[][]{
                 {7, 2, null, null, 6, 9, null, null, 4},
@@ -43,7 +43,5 @@ public class SolverTest {
                 {3, 8, 7, 5, 2, 6, 4, 9, 1},
                 {4, 9, 6, 3, 7, 1, 8, 2, 5}
         }));
-
     }
-
 }
