@@ -1,4 +1,4 @@
-package it.musialmarek.sudokusolver.service;
+package it.musialmarek.sudokusolver.sudoku;
 
 import it.musialmarek.sudokusolver.model.Sudoku;
 import org.apache.commons.lang3.ArrayUtils;
@@ -91,7 +91,6 @@ public class Solver {
                     sudoku.getArray()[i][j] = possibilities[i][j][0];
                 }
             }
-
         }
     }
 

@@ -1,4 +1,4 @@
-package it.musialmarek.sudokusolver.service;
+package it.musialmarek.sudokusolver.sudoku;
 
 import it.musialmarek.sudokusolver.model.Sudoku;
 import org.junit.Assert;
