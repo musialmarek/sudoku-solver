@@ -1,19 +1,11 @@
 package it.musialmarek.sudokusolver.sudoku;
 
 import it.musialmarek.sudokusolver.model.Sudoku;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class SolverTest {
-    private Solver solver;
-
-    @Before
-    public void setUp() {
-        solver = new Solver();
-    }
 
     @Test
     public void shouldReturnSolvedSudoku() {
@@ -32,7 +24,7 @@ public class SolverTest {
         //when
         Sudoku solvedSudoku = Solver.solveSudoku(sudoku);
         //then
-        Assert.assertThat(solvedSudoku.getArray(), is(new Integer[][]{
+        assertThat(solvedSudoku.getArray()).isEqualTo(new Integer[][]{
                 {7, 2, 5, 1, 6, 9, 3, 8, 4},
                 {6, 4, 9, 2, 3, 8, 1, 5, 7},
                 {8, 1, 3, 4, 5, 7, 2, 6, 9},
@@ -42,6 +34,6 @@ public class SolverTest {
                 {2, 5, 1, 8, 9, 4, 7, 3, 6},
                 {3, 8, 7, 5, 2, 6, 4, 9, 1},
                 {4, 9, 6, 3, 7, 1, 8, 2, 5}
-        }));
+        });
     }
 }
