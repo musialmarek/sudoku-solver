@@ -1,10 +1,12 @@
 package it.musialmarek.sudokusolver.sudoku;
 
 import it.musialmarek.sudokusolver.model.Sudoku;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@Slf4j
 public class Solver {
     static Integer[][] curr = new Integer[9][9];
 
@@ -13,8 +15,9 @@ public class Solver {
         curr = sudokuArray;
         if (solve(0, 0, sudokuArray)) {
             sudoku.setArray(curr);
+            log.debug("{}", sudoku.toString());
         } else {
-            System.out.println("impossible\n");
+            log.debug("impossible to solve");
         }
         return sudoku;
     }
@@ -34,7 +37,7 @@ public class Solver {
     }
 
     static boolean solve(Integer col, Integer row, Integer[][] sudokuArray) {
-        if (sudokuArray[col][row] == null) {
+        if (sudokuArray[col][row] == 0) {
             for (int i = 1; i <= 9; i++) {
                 if (isInsertPossible(col, row, i)) {
                     curr[col][row] = i;
@@ -43,7 +46,7 @@ public class Solver {
                     }
                 }
             }
-            curr[col][row] = null;
+            curr[col][row] = 0;
             return false;
         }
         return next(col, row, sudokuArray);
