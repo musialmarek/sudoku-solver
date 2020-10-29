@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku-Solver</title>
+</head>
+<body>
+<form th:action="@{/}" method="post">
+    <table>
+        <tr th:each="row: ${size}">
+            <td th:each="col: ${size}"><label>
+                <input style="width: 20px" type="number" step="1" max="9" min="0" th:name="|sudoku${row}${col}|"
+                       value=0>
+            </label></td>
+        </tr>
+        <input type="submit">
+    </table>
+    <table th:if="${solvedsudoku!=null}">
+        <tr th:each="row: ${solvedsudoku}">
+            <td th:each="cell: ${row}">
+                <p th:text="${cell}"></p>
+            </td>
+        </tr>
+
+    </table>
+</form>
+
+</body>
+</html>
