@@ -11,21 +11,44 @@ public class Solver {
     static Integer[][] curr = new Integer[9][9];
 
     public static Sudoku solveSudoku(Sudoku sudoku) {
-        Integer[][] sudokuArray = sudoku.getArray();
-        curr = sudokuArray;
-        if (solve(0, 0, sudokuArray)) {
-            sudoku.setArray(curr);
-            log.debug("{}", sudoku.toString());
-        } else {
-            log.debug("impossible to solve");
+        if (isSudokuCorrect(sudoku)) {
+            Integer[][] sudokuArray = sudoku.getArray();
+            curr = sudokuArray;
+            if (solve(0, 0, sudokuArray)) {
+                sudoku.setArray(curr);
+                log.debug("{}", sudoku.toString());
+            } else {
+                log.debug("impossible to solve");
+            }
         }
         return sudoku;
     }
 
-    static boolean isInsertPossible(Integer col, Integer row, Integer value) {
+    public static boolean isSudokuCorrect(Sudoku sudoku) {
+        Integer[][] sudokuArray = sudoku.getArray();
+        for (int row = 0; row < sudokuArray.length; row++) {
+            for (int col = 0; col < sudokuArray.length; col++) {
+                Integer value = sudokuArray[row][col];
+                if (value != 0)
+                    for (int i = 0; i < sudokuArray.length; i++) {
+                        int sectionRow = row / 3 * 3 + i % 3;
+                        int sectionCol = col / 3 * 3 + i / 3;
+                        boolean rowContain = value.equals(sudokuArray[row][i]) && i != col;
+                        boolean colContain = value.equals(sudokuArray[i][col]) && i != row;
+                        boolean sectionContain = value.equals(sudokuArray[sectionRow][sectionCol]) && sectionCol != col && sectionRow != row;
+                        if (rowContain || colContain || sectionContain) {
+                            return false;
+                        }
+                    }
+            }
+        }
+        return true;
+    }
+
+    static boolean isInsertPossible(Integer row, Integer col, Integer value) {
         for (int i = 0; i < 9; i++) {
-            if (value.equals(curr[col][i]) || value.equals(curr[i][row]) ||
-                    value.equals(curr[col / 3 * 3 + i % 3][row / 3 * 3 + i / 3])) return false;
+            if (value.equals(curr[row][i]) || value.equals(curr[i][col]) ||
+                    value.equals(curr[row / 3 * 3 + i % 3][col / 3 * 3 + i / 3])) return false;
         }
         return true;
     }
