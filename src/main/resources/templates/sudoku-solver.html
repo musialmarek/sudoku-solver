@@ -4,27 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Sudoku-Solver</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<form th:action="@{/}" method="post">
+<h1>Sudoku Solver</h1>
+<form th:if="${solvedsudoku==null}" th:action="@{/}" method="post">
     <table>
         <tr th:each="row: ${size}">
-            <td th:each="col: ${size}"><label>
-                <input style="width: 20px" type="number" step="1" max="9" min="0" th:name="|sudoku${row}${col}|"
-                       value=0>
-            </label></td>
-        </tr>
-        <input type="submit">
-    </table>
-    <table th:if="${solvedsudoku!=null}">
-        <tr th:each="row: ${solvedsudoku}">
-            <td th:each="cell: ${row}">
-                <p th:text="${cell}"></p>
+            <td th:each="col: ${size}" th:class="${background.makeBackground(row,col,s)}">
+                <label>
+                    <select th:class="${background.makeBackground(row,col,s)}" th:name="|sudoku${row}${col}|">
+                        <option th:each="number: ${size}" th:label="${number}" th:value="${number}"></option>
+                    </select>
+                </label>
             </td>
         </tr>
-
     </table>
+    <input type="submit" value="SOLVE!">
 </form>
+<table th:if="${solvedsudoku!=null}">
+    <tr th:each="row: ${solvedsudoku}">
+        <td th:each="cell: ${row}">
+            <p th:text="${cell}"></p>
+        </td>
+    </tr>
 
+</table>
 </body>
 </html>
