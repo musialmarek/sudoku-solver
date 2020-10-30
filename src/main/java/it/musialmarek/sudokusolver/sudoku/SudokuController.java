@@ -1,5 +1,6 @@
 package it.musialmarek.sudokusolver.sudoku;
 
+import it.musialmarek.sudokusolver.GridUtil.BackgroundMaker;
 import it.musialmarek.sudokusolver.model.Sudoku;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -15,11 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 public class SudokuController {
     @GetMapping()
     public String showEmptyTable(Model model) {
-        int[] size = new int[9];
-        for (int i = 0; i < size.length; i++) {
-            size[i] = i;
+        List<Integer> size = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            size.add(i,i);
         }
+        BackgroundMaker bm = new BackgroundMaker();
+        model.addAttribute("background",bm);
         model.addAttribute("size", size);
+        model.addAttribute("s",3);
         return "sudoku-solver";
     }
 
@@ -35,6 +41,8 @@ public class SudokuController {
         }
         Sudoku sudoku = new Sudoku(userSudoku);
         Sudoku solvedSudoku = Solver.solveSudoku(sudoku);
+        BackgroundMaker bm = new BackgroundMaker();
+        model.addAttribute("background",bm);
         model.addAttribute("sudoku", sudoku.getArray());
         model.addAttribute("solvedsudoku", solvedSudoku.getArray());
         return "sudoku-solver";
