@@ -9,15 +9,18 @@
 <body>
 <h1>Sudoku Solver</h1>
 <h1 style="color: red" th:if="${message!=null}" th:text="${message}"></h1>
-<form th:if="${solvedsudoku==null}" th:object="${sudoku}" th:action="@{/}" method="post">
+<form method="post" th:action="@{/}" th:if="${solvedsudoku==null}" th:object="${sudoku}">
     <table>
         <tr th:each="row, rowStat: *{array}">
-            <td th:each="col, colStat: ${row}" th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}">
+            <td th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}"
+                th:each="col, colStat: ${row}">
                 <label>
                     <select th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}"
-                            th:field="*{array[__${rowStat.index}__][__${colStat.index}__]}" th:value="*{array[__${rowStat.index}__][__${colStat.index}__]}">
+                            th:field="*{array[__${rowStat.index}__][__${colStat.index}__]}"
+                            th:value="*{array[__${rowStat.index}__][__${colStat.index}__]}">
                         <option th:label="null" th:value="null"></option>
-                        <option th:each="lenth, lenthStat : *{array}" th:label="${lenthStat.count}" th:value="${lenthStat.count}"></option>
+                        <option th:each="lenth, lenthStat : *{array}" th:label="${lenthStat.count}"
+                                th:value="${lenthStat.count}"></option>
                     </select>
                 </label>
             </td>
@@ -27,7 +30,8 @@
 </form>
 <table th:if="${solvedsudoku!=null}">
     <tr th:each="row, rowStat: ${solvedsudoku}">
-        <td th:each="cell, colStat: ${row}" th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,3)}">
+        <td th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,3)}"
+            th:each="cell, colStat: ${row}">
             <p th:text="${cell}"></p>
         </td>
     </tr>
