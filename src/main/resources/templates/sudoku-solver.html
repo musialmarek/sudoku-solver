@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku-Solver</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Sudoku Solver</h1>
+<h1 style="color: red" th:if="${message!=null}" th:text="${message}"></h1>
+
+<table>
+    <tr>
+        <td>
+            <button><a th:href="@{/?size=2}">Grid 4x4</a></button>
+        </td>
+        <td>
+            <button><a th:href="@{/?size=3}">Grid 9x9</a></button>
+        </td>
+        <td>
+            <button><a th:href="@{/?size=4}">Grid 16x16</a></button>
+        </td>
+    </tr>
+</table>
+<form method="post" th:action="@{/}" th:if="${solvedsudoku==null}" th:object="${sudoku.array}">
+    <table>
+        <tr th:each="row, rowStat: ${sudoku.array}">
+            <td th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}"
+                th:each="col, colStat: ${row}">
+                <label>
+                    <select th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}"
+                            th:name="|sudoku${rowStat.index},${colStat.index}|"
+                            th:value="${sudoku.array[__${rowStat.index}__][__${colStat.index}__]}">
+                        <option th:label="null" th:value="null"></option>
+                        <option th:each="lenth, lenthStat : ${sudoku.array}" th:label="${lenthStat.count}"
+                                th:value="${lenthStat.count}"></option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="size" th:value="${size}">
+    <input type="submit" value="SOLVE!">
+</form>
+<table th:if="${solvedsudoku!=null}">
+    <tr th:each="row, rowStat: ${solvedsudoku.array}">
+        <td th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,sudoku.size)}"
+            th:each="cell, colStat: ${row}">
+            <p th:text="${cell}"></p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,26 @@
+td {
+    height: 50px;
+    width: 50px;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+}
+.true{
+    background-color: green;
+}
+.false{
+    background-color: yellow;
+}
+
+table td select {
+    position: absolute;
+    display: block;
+    top:0;
+    left:0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
+}
