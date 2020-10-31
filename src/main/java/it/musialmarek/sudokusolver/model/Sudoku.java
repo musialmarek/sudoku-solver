@@ -35,13 +35,13 @@ public class Sudoku {
         return sb.toString();
     }
 
+    public int getSize() {
+        return (int) Math.pow(this.array.length, 0.5);
+    }
+
     public Sudoku setSize(int size) {
         int length = size * size;
         this.array = new Integer[length][length];
         return this;
-    }
-
-    public int getSize() {
-        return (int) Math.pow(this.array.length, 0.5);
     }
 }
