@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class Solver {
-    static Integer[][] curr = new Integer[9][9];
+    private static Integer[][] tempArray;
+    private static int size;
+    private static int length;
 
     public static Sudoku solveSudoku(Sudoku sudoku) {
         if (isSudokuCorrect(sudoku)) {
-            Integer[][] sudokuArray = sudoku.getArray();
-            curr = sudokuArray;
-            if (solve(0, 0, sudokuArray)) {
-                sudoku.setArray(curr);
-                log.debug("{}", sudoku.toString());
+            tempArray = sudoku.getArray().clone();
+            size = sudoku.getSize();
+            length = size * size;
+            if (solve(0, 0, tempArray)) {
+                sudoku.setArray(tempArray);
+                log.debug("solved sudoku: {}", sudoku.toString());
             } else {
                 log.debug("impossible to solve");
             }
@@ -26,13 +29,14 @@ public class Solver {
 
     public static boolean isSudokuCorrect(Sudoku sudoku) {
         Integer[][] sudokuArray = sudoku.getArray();
+        size = sudoku.getSize();
         for (int row = 0; row < sudokuArray.length; row++) {
             for (int col = 0; col < sudokuArray.length; col++) {
                 Integer value = sudokuArray[row][col];
-                if (value != 0)
+                if (value != null)
                     for (int i = 0; i < sudokuArray.length; i++) {
-                        int sectionRow = row / 3 * 3 + i % 3;
-                        int sectionCol = col / 3 * 3 + i / 3;
+                        int sectionRow = row / size * size + i % size;
+                        int sectionCol = col / size * size + i / size;
                         boolean rowContain = value.equals(sudokuArray[row][i]) && i != col;
                         boolean colContain = value.equals(sudokuArray[i][col]) && i != row;
                         boolean sectionContain = value.equals(sudokuArray[sectionRow][sectionCol]) && sectionCol != col && sectionRow != row;
@@ -45,31 +49,32 @@ public class Solver {
         return true;
     }
 
-    static boolean isInsertPossible(Integer row, Integer col, Integer value) {
-        for (int i = 0; i < 9; i++) {
-            if (value.equals(curr[row][i]) || value.equals(curr[i][col]) ||
-                    value.equals(curr[row / 3 * 3 + i % 3][col / 3 * 3 + i / 3])) return false;
+
+    private static boolean isInsertPossible(Integer row, Integer col, Integer value) {
+        for (int i = 0; i < length; i++) {
+            if (value.equals(tempArray[row][i]) || value.equals(tempArray[i][col]) ||
+                    value.equals(tempArray[row / size * size + i % size][col / size * size + i / size])) return false;
         }
         return true;
     }
 
-    static boolean next(Integer col, Integer row, Integer[][] sudokuArray) {
-        if (col == 8 && row == 8) return true;
-        else if (col == 8) return solve(0, row + 1, sudokuArray);
+    private static boolean next(Integer col, Integer row, Integer[][] sudokuArray) {
+        if (col == length - 1 && row == length - 1) return true;
+        else if (col == length - 1) return solve(0, row + 1, sudokuArray);
         else return solve(col + 1, row, sudokuArray);
     }
 
-    static boolean solve(Integer col, Integer row, Integer[][] sudokuArray) {
-        if (sudokuArray[col][row] == 0) {
-            for (int i = 1; i <= 9; i++) {
+    private static boolean solve(Integer col, Integer row, Integer[][] sudokuArray) {
+        if (sudokuArray[col][row] == null) {
+            for (int i = 1; i <= length; i++) {
                 if (isInsertPossible(col, row, i)) {
-                    curr[col][row] = i;
+                    tempArray[col][row] = i;
                     if (next(col, row, sudokuArray)) {
                         return true;
                     }
                 }
             }
-            curr[col][row] = 0;
+            tempArray[col][row] = null;
             return false;
         }
         return next(col, row, sudokuArray);
