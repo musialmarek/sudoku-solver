@@ -8,13 +8,16 @@
 </head>
 <body>
 <h1>Sudoku Solver</h1>
-<form th:if="${solvedsudoku==null}" th:action="@{/}" method="post">
+<h1 style="color: red" th:if="${message!=null}" th:text="${message}"></h1>
+<form th:if="${solvedsudoku==null}" th:object="${sudoku}" th:action="@{/}" method="post">
     <table>
-        <tr th:each="row: ${size}">
-            <td th:each="col: ${size}" th:class="${background.makeBackground(row,col,s)}">
+        <tr th:each="row, rowStat: *{array}">
+            <td th:each="col, colStat: ${row}" th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}">
                 <label>
-                    <select th:class="${background.makeBackground(row,col,s)}" th:name="|sudoku${row}${col}|">
-                        <option th:each="number: ${size}" th:label="${number}" th:value="${number}"></option>
+                    <select th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,size)}"
+                            th:field="*{array[__${rowStat.index}__][__${colStat.index}__]}" th:value="*{array[__${rowStat.index}__][__${colStat.index}__]}">
+                        <option th:label="null" th:value="null"></option>
+                        <option th:each="lenth, lenthStat : *{array}" th:label="${lenthStat.count}" th:value="${lenthStat.count}"></option>
                     </select>
                 </label>
             </td>
@@ -23,12 +26,11 @@
     <input type="submit" value="SOLVE!">
 </form>
 <table th:if="${solvedsudoku!=null}">
-    <tr th:each="row: ${solvedsudoku}">
-        <td th:each="cell: ${row}">
+    <tr th:each="row, rowStat: ${solvedsudoku}">
+        <td th:each="cell, colStat: ${row}" th:class="${sectionSplitter.assignCellToSection(rowStat.index,colStat.index,3)}">
             <p th:text="${cell}"></p>
         </td>
     </tr>
-
 </table>
 </body>
 </html>
