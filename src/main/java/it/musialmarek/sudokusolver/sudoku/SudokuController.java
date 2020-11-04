@@ -1,6 +1,6 @@
 package it.musialmarek.sudokusolver.sudoku;
 
-import it.musialmarek.sudokusolver.GridUtil.SectionSplitter;
+import it.musialmarek.sudokusolver.GridUtil.SectionClassNameSplitter;
 import it.musialmarek.sudokusolver.model.Sudoku;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequiredArgsConstructor
 public class SudokuController {
-    private final SectionSplitter sectionSplitter;
+    private final SectionClassNameSplitter sectionClassNameSplitter;
 
     @ModelAttribute("sectionSplitter")
-    public SectionSplitter getSectionSplitter() {
-        return sectionSplitter;
+    public SectionClassNameSplitter getSectionClassNameSplitter() {
+        return sectionClassNameSplitter;
     }
 
     @GetMapping()
