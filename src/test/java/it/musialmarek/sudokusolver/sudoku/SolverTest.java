@@ -10,6 +10,7 @@ public class SolverTest {
     @Test
     public void shouldReturnSolvedSudoku() {
         //given
+        Solver solver = new Solver();
         Sudoku sudoku = new Sudoku(new Integer[][]{
                 {7, 2, null, null, 6, 9, null, null, 4},
                 {null, null, 9, null, 3, null, null, 5, null},
@@ -22,7 +23,7 @@ public class SolverTest {
                 {4, null, null, 3, 7, null, null, 2, 5}
         });
         //when
-        Sudoku solvedSudoku = Solver.solveSudoku(sudoku);
+        Sudoku solvedSudoku = solver.solveSudoku(sudoku);
         //then
         assertThat(solvedSudoku.getArray()).isEqualTo(new Integer[][]{
                 {7, 2, 5, 1, 6, 9, 3, 8, 4},
