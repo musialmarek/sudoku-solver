@@ -4,30 +4,118 @@ import it.musialmarek.sudokusolver.model.Sudoku;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 @Service
 @Slf4j
 public class Solver {
-    private static Integer[][] tempArray;
-    private static int size;
-    private static int length;
+    List<List<Integer>> temp = new ArrayList<>();
+    int currentRow;
+    int currentCol;
+    int size;
+    int length;
 
-    public static Sudoku solveSudoku(Sudoku sudoku) {
+    public Sudoku solveSudoku(Sudoku sudoku) throws IllegalArgumentException {
         if (isSudokuCorrect(sudoku)) {
-            tempArray = sudoku.getArray().clone();
-            size = sudoku.getSize();
-            length = size * size;
-            if (solve(0, 0, tempArray)) {
-                sudoku.setArray(tempArray);
-                log.debug("solved sudoku: {}", sudoku.toString());
-            } else {
-                log.debug("impossible to solve");
+            List<List<Integer>> origin = new ArrayList<>();
+            for (Integer[] integers : sudoku.getArray()) {
+                origin.add(Arrays.asList(integers));
             }
+            List<List<Integer>> solve = solve(origin);
+            for (List<Integer> list : solve) {
+                Integer[] row = sudoku.getArray()[solve.indexOf(list)];
+                list.toArray(row);
+            }
+            log.debug("solved sudoku: {}", sudoku.toString());
         }
         return sudoku;
     }
 
-    public static boolean isSudokuCorrect(Sudoku sudoku) {
+
+    public List<List<Integer>> solve(List<List<Integer>> origin) {
+        createCopyOfSudokuBoard(origin);
+        currentRow = 0;
+        currentCol = 0;
+        size = (int) Math.pow(temp.size(), 0.5);
+        length = temp.size();
+        while (currentRow < length && currentCol < length) {
+            if (temp.get(currentRow).get(currentCol) == null) {
+                int firstPossible = getFirstPossible();
+                while (firstPossible == 0) {
+                    if (isPreviousCell()) {
+                        goToPreviousCell();
+                        if (origin.get(currentRow).get(currentCol) == null) {
+                            firstPossible = getFirstPossible();
+                        }
+                    } else {
+                        //TODO throw exeption or some information that solving is impossible
+                        log.error("EXEPTION");
+                    }
+                }
+                temp.get(currentRow).set(currentCol, firstPossible);
+            }
+            nextCell();
+        }
+        return temp;
+    }
+
+    private void createCopyOfSudokuBoard(List<List<Integer>> origin) {
+        temp = new ArrayList<>();
+        for (List<Integer> list : origin) {
+            List<Integer> row = new ArrayList<>(list);
+            temp.add(row);
+        }
+    }
+
+    private void goToPreviousCell() {
+        if (currentCol > 0) {
+            currentCol = currentCol - 1;
+        } else if (currentCol == 0) {
+            currentRow = currentRow - 1;
+            currentCol = length - 1;
+        }
+    }
+
+    private boolean isPreviousCell() {
+        return currentRow != 0 || currentCol != 0;
+    }
+
+    private int getFirstPossible() {
+        Integer currentValue = temp.get(currentRow).get(currentCol);
+        if (currentValue == null) {
+            currentValue = 0;
+        }
+        for (int value = currentValue + 1; value <= length; value++) {
+            if (isInsertPossible(currentRow, currentCol, value)) {
+                return value;
+            }
+        }
+        temp.get(currentRow).set(currentCol, null);
+        return 0;
+    }
+
+    private boolean isInsertPossible(Integer row, Integer col, Integer value) {
+        for (int i = 0; i < length; i++) {
+            if (value.equals(temp.get(row).get(i)) || value.equals(temp.get(i).get(col)) ||
+                    value.equals(temp.get(row / size * size + i % size).get(col / size * size + i / size)))
+                return false;
+        }
+        return true;
+    }
+
+    private void nextCell() {
+        if (currentCol == length - 1) {
+            currentRow = currentRow + 1;
+            currentCol = 0;
+        } else if (currentCol < length - 1) {
+            currentCol = currentCol + 1;
+        }
+    }
+
+    public boolean isSudokuCorrect(Sudoku sudoku) {
         Integer[][] sudokuArray = sudoku.getArray();
         size = sudoku.getSize();
         for (int row = 0; row < sudokuArray.length; row++) {
@@ -47,36 +135,5 @@ public class Solver {
             }
         }
         return true;
-    }
-
-
-    private static boolean isInsertPossible(Integer row, Integer col, Integer value) {
-        for (int i = 0; i < length; i++) {
-            if (value.equals(tempArray[row][i]) || value.equals(tempArray[i][col]) ||
-                    value.equals(tempArray[row / size * size + i % size][col / size * size + i / size])) return false;
-        }
-        return true;
-    }
-
-    private static boolean next(Integer col, Integer row, Integer[][] sudokuArray) {
-        if (col == length - 1 && row == length - 1) return true;
-        else if (col == length - 1) return solve(0, row + 1, sudokuArray);
-        else return solve(col + 1, row, sudokuArray);
-    }
-
-    private static boolean solve(Integer col, Integer row, Integer[][] sudokuArray) {
-        if (sudokuArray[col][row] == null) {
-            for (int i = 1; i <= length; i++) {
-                if (isInsertPossible(col, row, i)) {
-                    tempArray[col][row] = i;
-                    if (next(col, row, sudokuArray)) {
-                        return true;
-                    }
-                }
-            }
-            tempArray[col][row] = null;
-            return false;
-        }
-        return next(col, row, sudokuArray);
     }
 }
