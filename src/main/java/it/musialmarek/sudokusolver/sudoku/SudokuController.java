@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class SudokuController {
     private final SectionClassNameSplitter sectionClassNameSplitter;
+    private final Solver solver;
 
     @ModelAttribute("sectionSplitter")
     public SectionClassNameSplitter getSectionClassNameSplitter() {
@@ -43,8 +44,8 @@ public class SudokuController {
         int size = Integer.parseInt(request.getParameter("size"));
         Sudoku sudoku = getSudoku(request, size);
         log.debug(sudoku.toString());
-        if (Solver.isSudokuCorrect(sudoku)) {
-            Sudoku solvedSudoku = Solver.solveSudoku(sudoku);
+        if (solver.isSudokuCorrect(sudoku)) {
+            Sudoku solvedSudoku = solver.solveSudoku(sudoku);
             model.addAttribute("solvedsudoku", solvedSudoku);
         } else {
             model.addAttribute("message", "INCORRECT SUDOKU");
